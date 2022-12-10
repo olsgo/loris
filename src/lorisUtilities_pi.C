@@ -171,7 +171,7 @@ extern "C" void copyIf(const PartialList *src, PartialList *dst,
     ThrowIfNull((PartialList *)dst);
 
     std::remove_copy_if(src->begin(), src->end(), std::back_inserter(*dst),
-                        std::not1(PredWithPointer(predicate, data)));
+                        std::not_fn(PredWithPointer(predicate, data)));
   } catch (Exception &ex) {
     std::string s("Loris exception in copyIf(): ");
     s.append(ex.what());
@@ -197,7 +197,7 @@ extern "C" void copyLabeled(const PartialList *src, long label,
     ThrowIfNull((PartialList *)dst);
 
     std::remove_copy_if(src->begin(), src->end(), std::back_inserter(*dst),
-                        std::not1(PartialUtils::isLabelEqual(label)));
+                        std::not_fn(PartialUtils::isLabelEqual(label)));
   } catch (Exception &ex) {
     std::string s("Loris exception in copyLabeled(): ");
     s.append(ex.what());
@@ -262,7 +262,7 @@ extern "C" void extractIf(PartialList *src, PartialList *dst,
     ThrowIfNull((PartialList *)dst);
 
     std::list<Partial>::iterator it = std::stable_partition(
-        src->begin(), src->end(), std::not1(PredWithPointer(predicate, data)));
+        src->begin(), src->end(), std::not_fn(PredWithPointer(predicate, data)));
 
     PartialList tmp = src->extract(it, src->end());
     dst->splice(dst->end(), tmp);
@@ -308,7 +308,7 @@ extern "C" void extractLabeled(PartialList *src, long label, PartialList *dst) {
     ThrowIfNull((PartialList *)dst);
 
     std::list<Partial>::iterator it = std::stable_partition(
-        src->begin(), src->end(), std::not1(PartialUtils::isLabelEqual(label)));
+        src->begin(), src->end(), std::not_fn(PartialUtils::isLabelEqual(label)));
 
     PartialList tmp = src->extract(it, src->end());
     dst->splice(dst->end(), tmp);

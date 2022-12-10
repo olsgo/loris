@@ -415,7 +415,7 @@ PartialList::iterator Distiller::distill_list(PartialList &partials) {
 
     //  identify a sequence of Partials having the same label:
     PartialList::iterator upper = std::find_if(
-        lower, partials.end(), std::not1(PartialUtils::isLabelEqual(label)));
+        lower, partials.end(), std::not_fn(PartialUtils::isLabelEqual(label)));
 
     //  upper is the first Partial after lower whose label is not
     //  equal to that of lower.

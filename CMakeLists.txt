@@ -97,6 +97,17 @@ endif()
          XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym")
  endif()
  
+ # set compiler options
+ if(APPLE)
+     # missing return value should be an error
+     target_compile_options(${target} PRIVATE "-Werror=return-type")
+     # suppress block comments warnings
+     target_compile_options(${target} PRIVATE "-Wno-comment")
+ elseif(WIN32)
+     target_compile_options(${target} PRIVATE "/wd4068") # silence unknown pragma warning
+     target_compile_options(${target} PRIVATE "/EHa") # standard C++ stack unwinding
+ endif()
+ 
  include(GNUInstallDirs)
  
  install(
