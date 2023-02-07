@@ -196,7 +196,7 @@ extern "C" LinearEnvelope *createFreqReference(PartialList *partials,
   try {
     ThrowIfNull((PartialList *)partials);
 
-    //	use auto_ptr to manage memory in case
+    //	use unique_ptr to manage memory in case
     //	an exception is generated (hard to imagine):
     std::unique_ptr<LinearEnvelope> env_ptr;
     if (numSamps != 0) {
