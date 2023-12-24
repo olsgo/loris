@@ -5,7 +5,7 @@ include(ExternalProject)
 # set min version and deployment target -- before project
 #--------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "Minimum OS X deployment version")
 
@@ -38,6 +38,17 @@ elseif(WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:alignedNew-")
 endif()
  
+if(MSVC)
+    # arcane thing about setting runtime library flags
+    cmake_policy(SET CMP0091 NEW)
+
+    add_compile_options(
+        $<$<CONFIG:>:/MT>
+        $<$<CONFIG:Debug>:/MTd>
+        $<$<CONFIG:Release>:/MT>
+    )
+endif()
+
  #--------------------------------------------------------------------
  # Choose library output name
  #--------------------------------------------------------------------
@@ -109,6 +120,13 @@ endif()
  
  include(GNUInstallDirs)
  
+if(WIN32)
+    set(CMAKE_INSTALL_LIBDIR "C:/Program Files/loris/lib")
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+      set(CMAKE_INSTALL_PREFIX "C:/Program Files/loris" CACHE PATH "..." FORCE)
+    endif()
+endif()
+
  install(
      TARGETS ${target}
      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -120,7 +138,7 @@ endif()
  # install headers
  #--------------------------------------------------------------------
  
- install(FILES include/loris.h DESTINATION include/loris)
+ install(FILES include/loris.h DESTINATION include)
 
 #--------------------------------------------------------------------
  # Including custom cmake rules

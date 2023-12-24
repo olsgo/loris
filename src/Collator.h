@@ -245,7 +245,7 @@ inline PartialList::iterator Collator::collate(PartialList &partials)
   // (This requires bidirectional iterator support.)
   Iterator beginUnlabeled =
       std::partition(partials.begin(), partials.end(),
-                     std::not_fn(PartialUtils::isLabelEqual(0)));
+                     (PartialUtils::isLabelNotEqual(0)));
   //  this used to be a stable partition, which
   //  is very much slower and seems unnecessary
 

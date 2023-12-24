@@ -63,7 +63,7 @@ namespace PartialUtils {
 //!
 //! \invariant	env is a non-zero pointer to a valid instance of a
 //!            class derived from the abstract class Envelope.
-class PartialMutator : public std::unary_function<Partial, void> {
+class PartialMutator  {
 public:
   //! Construct a new PartialMutator from a constant mutation factor.
   PartialMutator(double x);
@@ -895,7 +895,7 @@ void fixPhaseBetween(Iter b, Iter e, double t1, double t2) {
 //! Partial argument is less than the specified duration in
 //! seconds, and false otherwise.
 //
-class isDurationLess : public std::unary_function<const Partial, bool> {
+class isDurationLess {
 public:
   //! Initialize a new instance with the specified label.
   isDurationLess(double x) : mDurationSecs(x) {}
@@ -920,19 +920,40 @@ private:
 //! Predicate functor returning true if the label of its Partial argument is
 //! equal to the specified 32-bit label, and false otherwise.
 //
-class isLabelEqual : public std::unary_function<const Partial, bool> {
+class isLabelEqual {
 public:
-  //! Initialize a new instance with the specified label.
-  isLabelEqual(int l) : label(l) {}
+    //! Initialize a new instance with the specified label.
+    isLabelEqual(int l) : label(l) {}
 
-  //! Function call operator: evaluate a Partial.
-  bool operator()(const Partial &p) const { return p.label() == label; }
+    //! Function call operator: evaluate a Partial.
+    bool operator()(const Partial& p) const { return p.label() == label; }
 
-  //! Function call operator: evaluate a Partial pointer.
-  bool operator()(const Partial *p) const { return p->label() == label; }
+    //! Function call operator: evaluate a Partial pointer.
+    bool operator()(const Partial* p) const { return p->label() == label; }
 
 private:
-  int label;
+    int label;
+};
+
+// ---------------------------------------------------------------------------
+//	isLabelNotEqual
+//
+//! Predicate functor returning false if the label of its Partial argument is
+//! equal to the specified 32-bit label, and true otherwise.
+//
+class isLabelNotEqual {
+public:
+    //! Initialize a new instance with the specified label.
+    isLabelNotEqual(int l) : label(l) {}
+
+    //! Function call operator: evaluate a Partial.
+    bool operator()(const Partial& p) const { return p.label() != label; }
+
+    //! Function call operator: evaluate a Partial pointer.
+    bool operator()(const Partial* p) const { return p->label() != label; }
+
+private:
+    int label;
 };
 
 // ---------------------------------------------------------------------------
@@ -941,7 +962,7 @@ private:
 //! Predicate functor returning true if the label of its Partial argument is
 //! greater than the specified 32-bit label, and false otherwise.
 //
-class isLabelGreater : public std::unary_function<const Partial, bool> {
+class isLabelGreater {
 public:
   //! Initialize a new instance with the specified label.
   isLabelGreater(int l) : label(l) {}
@@ -962,7 +983,7 @@ private:
 //! Predicate functor returning true if the label of its Partial argument is
 //! less than the specified 32-bit label, and false otherwise.
 //
-class isLabelLess : public std::unary_function<const Partial, bool> {
+class isLabelLess {
 public:
   //! Initialize a new instance with the specified label.
   isLabelLess(int l) : label(l) {}
@@ -984,7 +1005,7 @@ private:
 //! Partial argument is less than the specified absolute amplitude, and
 //! false otherwise.
 //
-class isPeakLess : public std::unary_function<const Partial, bool> {
+class isPeakLess {
 public:
   //! Initialize a new instance with the specified peak amplitude.
   isPeakLess(double x) : thresh(x) {}
@@ -999,10 +1020,6 @@ private:
   double thresh;
 };
 
-//	-- comparitors --
-
-typedef std::binary_function<const Partial, const Partial, bool>
-    PartialComparitor;
 
 // ---------------------------------------------------------------------------
 //	compareLabelLess
@@ -1011,7 +1028,7 @@ typedef std::binary_function<const Partial, const Partial, bool>
 //! argument has a label whose 32-bit integer representation is less than
 //! that of the second Partial argument's label, and false otherwise.
 //
-class compareLabelLess : public PartialComparitor {
+class compareLabelLess  {
 public:
   //! Compare two Partials, return true if its first Partial
   //! argument has a label whose 32-bit integer representation is less than
@@ -1035,8 +1052,7 @@ public:
 //! argument has duration less than that of the second Partial
 //! argument, and false otherwise.
 //
-class compareDurationLess
-    : public std::binary_function<const Partial, const Partial, bool> {
+class compareDurationLess {
 public:
   //! Compare two Partials, return true if its first Partial
   //! argument has duration less than that of the second Partial
@@ -1060,8 +1076,7 @@ public:
 //! argument has duration greater than that of the second Partial
 //! argument, and false otherwise.
 //
-class compareDurationGreater
-    : public std::binary_function<const Partial, const Partial, bool> {
+class compareDurationGreater {
 public:
   //! Compare two Partials, return true if its first Partial
   //! argument has duration greater than that of the second Partial
@@ -1085,8 +1100,7 @@ public:
 //! argument has start time earlier than that of the second Partial
 //! argument, and false otherwise.
 //
-class compareStartTimeLess
-    : public std::binary_function<const Partial, const Partial, bool> {
+class compareStartTimeLess {
 public:
   //! Compare two Partials, return true if its first Partial
   //! argument has start time earlier than that of the second Partial

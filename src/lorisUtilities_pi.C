@@ -90,15 +90,27 @@ struct CallWithPointer : public std::unary_function<Partial, void> {
 };
 
 struct PredWithPointer : public std::unary_function<const Partial, bool> {
-  typedef int (*Pred)(const Partial *, void *);
-  Pred pred;
-  void *data;
+    typedef int (*Pred)(const Partial*, void*);
+    Pred pred;
+    void* data;
 
-  PredWithPointer(Pred p, void *d) : pred(p), data(d) {}
+    PredWithPointer(Pred p, void* d) : pred(p), data(d) {}
 
-  bool operator()(const Partial &partial) const {
-    return 0 != pred(&partial, data);
-  }
+    bool operator()(const Partial& partial) const {
+        return 0 != pred(&partial, data);
+    }
+};
+
+struct NotPredWithPointer : public std::unary_function<const Partial, bool> {
+    typedef int (*Pred)(const Partial*, void*);
+    Pred pred;
+    void* data;
+
+    NotPredWithPointer(Pred p, void* d) : pred(p), data(d) {}
+
+    bool operator()(const Partial& partial) const {
+        return 0 == pred(&partial, data);
+    }
 };
 
 /* ---------------------------------------------------------------- */
@@ -171,7 +183,7 @@ extern "C" void copyIf(const PartialList *src, PartialList *dst,
     ThrowIfNull((PartialList *)dst);
 
     std::remove_copy_if(src->begin(), src->end(), std::back_inserter(*dst),
-                        std::not_fn(PredWithPointer(predicate, data)));
+                        (NotPredWithPointer(predicate, data)));
   } catch (Exception &ex) {
     std::string s("Loris exception in copyIf(): ");
     s.append(ex.what());
@@ -197,7 +209,7 @@ extern "C" void copyLabeled(const PartialList *src, long label,
     ThrowIfNull((PartialList *)dst);
 
     std::remove_copy_if(src->begin(), src->end(), std::back_inserter(*dst),
-                        std::not_fn(PartialUtils::isLabelEqual(label)));
+                        (PartialUtils::isLabelNotEqual(label)));
   } catch (Exception &ex) {
     std::string s("Loris exception in copyLabeled(): ");
     s.append(ex.what());
@@ -262,7 +274,7 @@ extern "C" void extractIf(PartialList *src, PartialList *dst,
     ThrowIfNull((PartialList *)dst);
 
     std::list<Partial>::iterator it = std::stable_partition(
-        src->begin(), src->end(), std::not_fn(PredWithPointer(predicate, data)));
+        src->begin(), src->end(), (NotPredWithPointer(predicate, data)));
 
     PartialList tmp = src->extract(it, src->end());
     dst->splice(dst->end(), tmp);
@@ -308,7 +320,7 @@ extern "C" void extractLabeled(PartialList *src, long label, PartialList *dst) {
     ThrowIfNull((PartialList *)dst);
 
     std::list<Partial>::iterator it = std::stable_partition(
-        src->begin(), src->end(), std::not_fn(PartialUtils::isLabelEqual(label)));
+        src->begin(), src->end(), (PartialUtils::isLabelNotEqual(label)));
 
     PartialList tmp = src->extract(it, src->end());
     dst->splice(dst->end(), tmp);
