@@ -372,6 +372,30 @@ AC_ARG_ENABLE(debugloris,
     [DEBUG_LORIS="$enableval" ], [DEBUG_LORIS=] )
 
 dnl----------------------------------------------------------------
+dnl Add compatibility checks for M1 Max and Sequoia
+dnl----------------------------------------------------------------
+
+AC_MSG_RESULT(----- Compatibility Checks for M1 Max and Sequoia -----)
+
+dnl Check for M1 Max architecture
+AC_MSG_CHECKING([for M1 Max architecture])
+if test "$host_cpu" = "arm64"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE([HAVE_M1_MAX], [1], [Define if building for M1 Max architecture])
+else
+    AC_MSG_RESULT([no])
+fi
+
+dnl Check for Sequoia OS
+AC_MSG_CHECKING([for Sequoia OS])
+if test "$host_os" = "darwin20"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE([HAVE_SEQUOIA_OS], [1], [Define if building for Sequoia OS])
+else
+    AC_MSG_RESULT([no])
+fi
+
+dnl----------------------------------------------------------------
 dnl Generate Makefiles
 dnl----------------------------------------------------------------
 
@@ -420,5 +444,16 @@ else
 	echo See "./configure --help".
 fi
 
+if test -n "$HAVE_M1_MAX" ; then
+    echo M1 Max architecture support: Enabled.
+else
+    echo M1 Max architecture support: Disabled.
+fi
+
+if test -n "$HAVE_SEQUOIA_OS" ; then
+    echo Sequoia OS support: Enabled.
+else
+    echo Sequoia OS support: Disabled.
+fi
 
 AC_MSG_RESULT(----- End Of Configuration -----)

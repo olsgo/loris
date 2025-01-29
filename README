@@ -49,6 +49,29 @@ Mac OS X. Loris needs to link against the dynamic FFTW library. You need
 to explicitly enable dynamic linking when building FFTW so that the
 dynamic (shared) library is built.
 
+M1 Max and Sequoia Installation:
+
+To install Loris on an M1 Max running Sequoia, follow these steps:
+
+1. Ensure you have the latest version of Xcode and the Xcode command line tools installed.
+2. Install Homebrew if you haven't already. You can install it by running the following command in your terminal:
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+3. Use Homebrew to install the necessary dependencies:
+   brew install cmake swig fftw
+4. Clone the Loris repository:
+   git clone https://github.com/olsgo/loris.git
+5. Navigate to the Loris directory:
+   cd loris
+6. Create a build directory and navigate to it:
+   mkdir build && cd build
+7. Run CMake to configure the build:
+   cmake ..
+8. Build the project:
+   make
+9. Install the project:
+   sudo make install
+
+These steps should ensure that Loris is installed correctly on your M1 Max running Sequoia. If you encounter any issues, please refer to the documentation or contact the developers for assistance.
 
 COPYRIGHT AND LICENSE:
 
