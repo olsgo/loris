@@ -502,7 +502,11 @@ std::complex<double> ReassignedSpectrum::operator[](unsigned long idx) const {
 //	Function object for building complex numbers.
 //
 template <class T>
-struct make_complex : binary_function<T, T, std::complex<T>> {
+struct make_complex {
+  using first_argument_type = T;
+  using second_argument_type = T;
+  using result_type = std::complex<T>;
+
   std::complex<T> operator()(const T &re, const T &im) const {
     return std::complex<T>(re, im);
   }

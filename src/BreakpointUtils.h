@@ -98,23 +98,21 @@ Breakpoint makeNullAfter(const Breakpoint &bp,
 //!	Predicate functor returning true if its Breakpoint argument
 //!	has frequency between specified bounds, and false otherwise.
 //
-class isFrequencyBetween : public std::unary_function<const Breakpoint, bool> {
+// Update isFrequencyBetween to remove std::unary_function
+class isFrequencyBetween {
 public:
-  //! Return true if its Breakpoint argument has frequency
-  //! between specified bounds, and false otherwise.
+  using argument_type = const Breakpoint;
+  using result_type = bool;
+
   bool operator()(const Breakpoint &b) const {
     return (b.frequency() > _fmin) && (b.frequency() < _fmax);
   }
 
-  //	constructor:
-
-  //! Construct a predicate functor, specifying two frequency bounds.
   isFrequencyBetween(double x, double y) : _fmin(x), _fmax(y) {
     if (x > y)
       std::swap(x, y);
   }
 
-  //	bounds:
 private:
   double _fmin, _fmax;
 };
@@ -148,11 +146,13 @@ static bool isNull(const Breakpoint &bp) { return !isNonNull(bp); }
 //!	argument has frequency less than that of its second Breakpoint argument,
 //!	and false otherwise.
 //
-class compareFrequencyLess
-    : public std::binary_function<const Breakpoint, const Breakpoint, bool> {
+// Update compareFrequencyLess to remove std::binary_function
+class compareFrequencyLess {
 public:
-  //! Return true if its first Breakpoint argument has frequency less
-  //! than that of its second Breakpoint argument, and false otherwise.
+  using first_argument_type = const Breakpoint;
+  using second_argument_type = const Breakpoint;
+  using result_type = bool;
+
   bool operator()(const Breakpoint &lhs, const Breakpoint &rhs) const {
     return lhs.frequency() < rhs.frequency();
   }
@@ -169,11 +169,12 @@ typedef compareFrequencyLess less_frequency;
 //!	argument has amplitude greater than that of its second Breakpoint
 //! argument, 	and false otherwise.
 //
-class compareAmplitudeGreater
-    : public std::binary_function<const Breakpoint, const Breakpoint, bool> {
+class compareAmplitudeGreater {
 public:
-  //!	Return true if its first Breakpoint argument has amplitude greater
-  //!	than that of its second Breakpoint argument, and false otherwise.
+  using first_argument_type = const Breakpoint;
+  using second_argument_type = const Breakpoint;
+  using result_type = bool;
+
   bool operator()(const Breakpoint &lhs, const Breakpoint &rhs) const {
     return lhs.amplitude() > rhs.amplitude();
   }
@@ -190,11 +191,13 @@ typedef compareAmplitudeGreater greater_amplitude;
 //!	argument has amplitude less than that of its second Breakpoint argument,
 //!	and false otherwise.
 //
-class compareAmplitudeLess
-    : public std::binary_function<const Breakpoint, const Breakpoint, bool> {
+// Update compareAmplitudeLess to remove std::binary_function
+class compareAmplitudeLess {
 public:
-  //!	Return true if its first Breakpoint argument has amplitude greater
-  //!	than that of its second Breakpoint argument, and false otherwise.
+  using first_argument_type = const Breakpoint;
+  using second_argument_type = const Breakpoint;
+  using result_type = bool;
+
   bool operator()(const Breakpoint &lhs, const Breakpoint &rhs) const {
     return lhs.amplitude() < rhs.amplitude();
   }

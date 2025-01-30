@@ -111,14 +111,14 @@ public:
 
   //	-- comparitors --
 
-  //!	Comparitor (binary) functor returning true if its first Marker
-  //!	argument should appear before the second in a range sorted
-  //!	by Marker name.
-  struct compareNameLess
-      : public std::binary_function<const Marker, const Marker, bool> {
-    //! Function call operator, return true if the first Marker
-    //!	argument should appear before the second in a range sorted
-    //!	by Marker name.
+  //! Comparitor (binary) functor returning true if its first Marker
+  //! argument should appear before the second in a range sorted
+  //! by Marker name.
+  struct compareNameLess {
+    using first_argument_type = const Marker;
+    using second_argument_type = const Marker;
+    using result_type = bool;
+
     bool operator()(const Marker &lhs, const Marker &rhs) const {
       return lhs.name() < rhs.name();
     }
@@ -128,27 +128,31 @@ public:
   //! \deprecated Use compareNameLess instead.
   typedef compareNameLess sortByName;
 
-  //!	Comparitor (binary) functor returning true if its first Marker
-  //!	argument should appear before the second in a range sorted
-  //!	by Marker time.
-  struct compareTimeLess
-      : public std::binary_function<const Marker, const Marker, bool> {
-    //! Function call operator, return true if the first Marker
-    //!	argument should appear before the second in a range sorted
-    //!	by Marker time.
+  //! Comparitor (binary) functor returning true if its first Marker
+  //! argument should appear before the second in a range sorted
+  //! by Marker time.
+  class compareTime {
+  public:
+    using first_argument_type = const Marker;
+    using second_argument_type = const Marker;
+    using result_type = bool;
+  
     bool operator()(const Marker &lhs, const Marker &rhs) const {
       return lhs.time() < rhs.time();
     }
   };
 
-  //! old name for compareTimeLess, legacy support
-  //! \deprecated Use compareTimeLess instead
-  typedef compareTimeLess sortByTime;
+  //! old name for compareTime, legacy support
+  //! \deprecated Use compareTime instead
+  typedef compareTime sortByTime;
 
   //! Predicate functor returning true if the name of a Marker
   //! equal to the specified string, and false otherwise.
-  class isNameEqual : public std::unary_function<const Marker, bool> {
+  class isNameEqual {
   public:
+    using argument_type = const Marker;
+    using result_type = bool;
+
     //! Initialize a new instance with the specified name.
     isNameEqual(const std::string &s) : name(s) {}
 
@@ -156,7 +160,7 @@ public:
     bool operator()(const Marker &m) const { return m.name() == name; }
 
   private:
-    std::string name; //!	the name to compare against
+    std::string name; //! the name to compare against
   };
 
 private:
