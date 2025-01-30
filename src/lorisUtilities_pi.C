@@ -67,7 +67,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <functional>
 #include <iterator>
 #include <list>
 #include <memory>
@@ -79,7 +78,7 @@ using namespace Loris;
 //	by converting Partial references to pointer arguments.
 //
 
-struct CallWithPointer : public std::unary_function<Partial, void> {
+struct CallWithPointer {
   typedef void (*Func)(Partial *, void *);
   Func func;
   void *data;
@@ -89,7 +88,7 @@ struct CallWithPointer : public std::unary_function<Partial, void> {
   void operator()(Partial &partial) const { func(&partial, data); }
 };
 
-struct PredWithPointer : public std::unary_function<const Partial, bool> {
+struct PredWithPointer {
     typedef int (*Pred)(const Partial*, void*);
     Pred pred;
     void* data;
@@ -101,7 +100,7 @@ struct PredWithPointer : public std::unary_function<const Partial, bool> {
     }
 };
 
-struct NotPredWithPointer : public std::unary_function<const Partial, bool> {
+struct NotPredWithPointer {
     typedef int (*Pred)(const Partial*, void*);
     Pred pred;
     void* data;
