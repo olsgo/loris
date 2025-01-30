@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "Marker.C": "cpp",
-    "ReassignedSpectrum.C": "cpp"
+    "ReassignedSpectrum.C": "cpp",
+    "Sieve.C": "cpp"
   }
 }
