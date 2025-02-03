@@ -132,12 +132,14 @@ if(WIN32)
     endif()
 endif()
 
- install(
-     TARGETS ${target}
-     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
- )
+ # Modify the install(TARGETS) command to include EXPORT
+install(
+    TARGETS ${target}
+    EXPORT lorisTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
  
  #--------------------------------------------------------------------
  # install headers
@@ -167,6 +169,39 @@ endif()
      ${ALL_SOURCES}
      )
  endif()
+
+# Generate and install config files
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/LorisConfigVersion.cmake"
+    VERSION "1.9.0"
+    COMPATIBILITY SameMajorVersion
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/LorisConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/LorisConfig.cmake"
+    @ONLY
+)
+
+# Export targets
+export(TARGETS ${target}
+    NAMESPACE loris::
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/LorisTargets.cmake"
+)
+
+# Install CMake config files
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/LorisConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/LorisConfigVersion.cmake"
+    DESTINATION lib/cmake/loris
+)
+
+install(EXPORT lorisTargets
+    FILE LorisTargets.cmake
+    NAMESPACE loris::
+    DESTINATION lib/cmake/loris
+)
  
  
 
